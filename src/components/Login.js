@@ -1,6 +1,10 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import React, { useRef, useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { USER_AVATAR } from '../utils/constants';
 import { auth } from '../utils/firebase';
+import { addUser } from '../utils/userSlice';
 import { checkFullNameValid, checkValidCredentials } from '../utils/validate';
 import Header from './Header'
 
@@ -11,6 +15,8 @@ function Login() {
     const fullName = useRef(null);
     const email = useRef(null);
     const password = useRef(null);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const toggleSignInForm = () => {
         setIsSignInForm(!isSignInForm);
@@ -32,11 +38,33 @@ function Login() {
                     console.log("successfully signed up");
                     const user = userCredential.user;
                     // ...
+
+                    updateProfile(user, {
+                        displayName: fullName.current.value, photoURL: USER_AVATAR
+                    }).then(() => {
+                        // Profile updated!
+                        console.log('updated profile')
+                        const { uid, email, displayName, photoURL } = auth.currentUser
+                        dispatch(
+                            addUser({
+                                uid: uid,
+                                email: email,
+                                displayName: displayName,
+                                photoURL: photoURL
+                            })
+                        )
+                        // ...
+                    }).catch((error) => {
+                        // An error occurred
+                        // ...
+                        setErrorInCredMessage(error.message)
+                    });
+
                 })
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
-                    setErrorInCredMessage(errorMessage)
+                    setErrorInCredMessage(errorCode + "-" + errorMessage)
                     // ..
                 });
         }
@@ -47,6 +75,8 @@ function Login() {
                     // Signed in 
                     const user = userCredential.user;
                     console.log("user successfully signed in.", user)
+
+                    navigate("/browse")
                     // ...
                 })
                 .catch((error) => {

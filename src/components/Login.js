@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import React, { useRef, useState } from 'react'
 import { auth } from '../utils/firebase';
 import { checkFullNameValid, checkValidCredentials } from '../utils/validate';
@@ -36,11 +36,25 @@ function Login() {
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
+                    setErrorInCredMessage(errorMessage)
                     // ..
                 });
         }
         else {
             // Sign In 
+            signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+                .then((userCredential) => {
+                    // Signed in 
+                    const user = userCredential.user;
+                    console.log("user successfully signed in.", user)
+                    // ...
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.log("error occurred on sign in", error)
+                    setErrorInCredMessage(errorMessage)
+                });
         }
 
     }

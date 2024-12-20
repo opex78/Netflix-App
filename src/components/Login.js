@@ -25,10 +25,17 @@ function Login() {
     }
 
     const handleButtonClick = () => {
-        setErrorInCredMessage(checkValidCredentials(email.current.value, password.current.value));
-        !isSignInForm && setErrorInNameMessage(checkFullNameValid(fullName.current.value))
+        const credErr = checkValidCredentials(email.current?.value, password.current?.value)
+        const fullNameErr = checkFullNameValid(fullName.current?.value || "")
 
-        if (errorInCredMessage || errorInNameMessage) return;
+        if (credErr) {
+            setErrorInCredMessage(credErr);
+            return;
+        }
+        if (!isSignInForm && fullNameErr) {
+            setErrorInNameMessage(fullNameErr)
+            return;
+        }
 
         if (!isSignInForm) {
             // Sign up
@@ -53,6 +60,7 @@ function Login() {
                                 photoURL: photoURL
                             })
                         )
+                        navigate("/browse")
                         // ...
                     }).catch((error) => {
                         // An error occurred
@@ -75,7 +83,15 @@ function Login() {
                     // Signed in 
                     const user = userCredential.user;
                     console.log("user successfully signed in.", user)
-
+                    const { uid, email, displayName, photoURL } = user
+                    dispatch(
+                        addUser({
+                            uid: uid,
+                            email: email,
+                            displayName: displayName,
+                            photoURL: photoURL
+                        })
+                    )
                     navigate("/browse")
                     // ...
                 })

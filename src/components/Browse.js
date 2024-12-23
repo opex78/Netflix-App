@@ -11,6 +11,14 @@ function Browse() {
             <MainContainer />
         </div>
     )
+    /*
+    MainContainer
+        - VideoBackground
+        - VideoTitle
+    SecondaryContainer
+        - MovieList
+        - Cards * n
+    */
 }
 
 export default Browse

@@ -17,4 +17,8 @@
 - Bug fix : Sign up page user display name and user_avatar profile image
 - Bug fix : if user is loggin we need to redirect ti browse page and if not redirect to / page and vice versa
 - Register on TMDB API and create app - get access token and api key
-- Get data from TMDB API now playing movie list 
+- Get data from TMDB API now playing movie list
+- Build Secondary Component
+- Build Movie List
+  - Now Playing
+- Build Movie Card

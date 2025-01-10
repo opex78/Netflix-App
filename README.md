@@ -22,3 +22,25 @@
 - Build Movie List
   - Now Playing
 - Build Movie Card
+
+
+
+=== Typescript ===
+1. Error Reduciton : compile time error catch instead of runtime
+2. Productivity : Auto Completion, type interface, intellisense
+3. Scalable code : Refactoring
+4. Demand 
+
+==== RULES ====
+1. Static typing
+let username = "John"
+username = 123; // Compile time ERROR 
+console.log("username", username)
+
+2. interface and type aliases
+interface User {
+  id: number;
+  name: string;
+}
+
+const user: User = {id:1, name:"John"}
